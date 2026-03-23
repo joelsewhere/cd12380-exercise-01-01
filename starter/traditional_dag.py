@@ -38,7 +38,7 @@
 #
 # Each function that needs to receive upstream data should
 # accept `ti`` as an argument
-#
+
 # 2a) extract() — returns the raw_data dictionary
 #### YOUR CODE HERE
 
@@ -57,15 +57,7 @@
 # ── STEP 3 ───────────────────────────────────────────────────
 # Instantiate a DAG object.
 #
-# Swap out the @dag decorator arguments for equivalent keyword
-# arguments passed to the DAG constructor.  Use the same values
-# that appear in decorator_dag.py so the two DAGs are
-# functionally identical:
-#
-#   dag_id    → "traditional_pipeline"
-#   start_date, schedule, catchup, tags
-#
-# Tip: use a `with DAG(...) as dag:` context manager — any
+# Here we use a `with DAG(...) as dag:` context manager — any
 # operator instantiated inside the block is registered to this
 # DAG automatically, without needing an explicit `dag=` kwarg.
 with DAG(dag_id="traditional_pipeline") as dag:
@@ -79,12 +71,7 @@ with DAG(dag_id="traditional_pipeline") as dag:
     #                     function names: "extract",
     #                     "transform", "load")
     #   python_callable → the plain function you defined above
-    #
-    # For tasks that use ti.xcom_pull, also pass:
-    #   provide_context=True   (Airflow <2.x)
-    #   — OR —
-    #   op_kwargs / the default context injection (Airflow 2.x+)
-    #
+
     # 4a) extract_task
     #### YOUR CODE HERE
 

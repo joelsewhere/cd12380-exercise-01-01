@@ -1,10 +1,6 @@
-from airflow.decorators import dag, task
-from datetime import datetime
+from airflow.sdk import dag, task
 
-
-@dag(
-    dag_id="decorator_pipeline",
-    )
+@dag
 def decorator_pipeline():
 
     @task

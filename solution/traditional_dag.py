@@ -8,9 +8,7 @@
 
 # ── STEP 1 ───────────────────────────────────────────────────
 # Import the DAG and PythonOperator objects from the airflow
-# package.  You will also need `datetime` from the standard
-# library to set the `start_date` when you configure the DAG.
-from datetime import datetime
+# package
 from airflow import DAG
 from airflow.operators.python import PythonOperator
 
@@ -25,11 +23,10 @@ def extract():
     return raw_data
 
 
-# 2b) transform(**kwargs) — pulls raw_data from XCom,
+# 2b) transform(ti) — pulls raw_data from XCom,
 #     converts temperature to Celsius, uppercases the city,
 #     and returns the cleaned dictionary
-def transform(**kwargs):
-    ti = kwargs["ti"]
+def transform(ti):
     raw_data = ti.xcom_pull(task_ids="extract")
     transformed = {
         "temp_celsius": round((raw_data["temperature"] - 32) * 5 / 9, 2),
@@ -40,10 +37,9 @@ def transform(**kwargs):
     return transformed
 
 
-# 2c) load(**kwargs) — pulls transformed_data from XCom
+# 2c) load(ti) — pulls transformed_data from XCom
 #     and prints the final record
-def load(**kwargs):
-    ti = kwargs["ti"]
+def load(ti):
     transformed_data = ti.xcom_pull(task_ids="transform")
     print(f"Loading record to database: {transformed_data}")
     print("Load complete.")
@@ -51,13 +47,7 @@ def load(**kwargs):
 
 # ── STEP 3 ───────────────────────────────────────────────────
 # Instantiate a DAG object using a `with` context manager.
-with DAG(
-    dag_id="traditional_pipeline",
-    start_date=datetime(2024, 1, 1),
-    schedule="@daily",
-    catchup=False,
-    tags=["tutorial"],
-) as dag:
+with DAG(dag_id="traditional_pipeline") as dag:
 
     # ── STEP 4 ─────────────────────────────────────────────
     # Create a PythonOperator for each pipeline stage.

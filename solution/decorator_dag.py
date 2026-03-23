@@ -1,14 +1,6 @@
-from airflow.decorators import dag, task
-from datetime import datetime
+from airflow.sdk import dag, task
 
-
-@dag(
-    dag_id="decorator_pipeline",
-    start_date=datetime(2024, 1, 1),
-    schedule="@daily",
-    catchup=False,
-    tags=["tutorial"],
-)
+@dag
 def decorator_pipeline():
 
     @task
